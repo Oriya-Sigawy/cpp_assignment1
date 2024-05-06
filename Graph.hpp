@@ -3,7 +3,7 @@
 #pragma once
 
 #include <vector>
-
+#include <string>
 using std::vector;
 
 namespace ariel

@@ -20,6 +20,10 @@ namespace ariel
 
     void Graph::loadGraph(vector<vector<int>> g)
     {
+        // reset
+        this->vertices = 0;
+        this->edges = 0;
+
         this->vertices = g.size();
         for (unsigned int i = 0; i < vertices; i++)
         {
