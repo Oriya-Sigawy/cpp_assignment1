@@ -1,7 +1,16 @@
+// 214984932 Oriyas.07@gmail.com
+
 #include "doctest.h"
 #include "Algorithms.hpp"
 #include "Graph.hpp"
 
+/*
+this func checks if the vertices in the vector that Algorithms::getCycle returned indeed creates a cycle in g.
+@params: 
+g: the graph to check the cycle on
+c: the vector of vertices that getCycle returns
+@returns: true if the vertices creates a cycle, false otherwise
+*/
 bool testCycle(ariel::Graph g, vector<unsigned int> c)
 {
     for (unsigned int i = 0; i < c.size() - 1; i++)
@@ -18,6 +27,13 @@ bool testCycle(ariel::Graph g, vector<unsigned int> c)
     return true;
 }
 
+/*
+this func checks if the vertices in the vector that Algorithms::getNegativeCycle returned indeed creates a negative cycle in g.
+@params: 
+g: the graph to check the cycle on
+c: the vector of vertices that getNegativeCycle returns
+@returns: true if the vertices creates a negative cycle, false otherwise
+*/
 bool testNegCycle(ariel::Graph g, vector<unsigned int> c)
 {
     int sum = 0;
@@ -27,10 +43,7 @@ bool testNegCycle(ariel::Graph g, vector<unsigned int> c)
         {
             return false;
         }
-        else
-        {
             sum += g.getAt(c[i], c[i + 1]);
-        }
     }
     if (!g.getAt(c[c.size() - 1], c[0]))
     {
@@ -43,7 +56,14 @@ bool testNegCycle(ariel::Graph g, vector<unsigned int> c)
     }
     return true;
 }
-
+/*
+this func checks if the 2 vectors of the array that Algorithms::bipartite returned are indeed foreign,
+and that every edge in the graph goes from a vertice in one vector to a vertice in the other vector. 
+@params: 
+g: the graph to check if bipartite
+result: array of 2 vectors which holds the two groups divation for the graph's vertices.
+@returns: true if the two vectors are a legal partition of the graph vertices, otherwise false.
+*/
 bool testBipartite(ariel::Graph g, std::array<vector<unsigned int>, 2> result)
 {
     for (unsigned int i = 0; i < result[0].size(); i++)
@@ -390,6 +410,19 @@ TEST_CASE("Test shortestPath in undirected disconnected graph")
     CHECK(ariel::Algorithms::shortestPath(g, 0, 4).size() == 0);
 }
 
+TEST_CASE("Test shortestPath in undirected graph with negative edge")
+{
+    ariel::Graph g;
+    vector<vector<int>> graph = {
+        {0, 10, -1, 1, 0},
+        {10, 0, 10, 0, 0},
+        {-1, 10, 0, 0, 2},
+        {1, 0, 0, 0, 0},
+        {0, 0, 2, 0, 0}};
+    g.loadGraph(graph);
+    vector<unsigned int> check = {1, 2, 0};
+    CHECK(ariel::Algorithms::shortestPath(g, 1, 0) == check);
+}
 TEST_CASE("Test shortestPath in directed graph")
 {
     ariel::Graph g;

@@ -1,7 +1,4 @@
-/*
- * Demo program for Exercise 2.
- * Author: Benjamin Saldman.
- */
+// 214984932 Oriyas.07@gmail.com
 
 #include "Graph.hpp"
 #include "Algorithms.hpp"
@@ -15,6 +12,11 @@ using ariel::Algorithms;
 using std::cout;
 using std::endl;
 
+/*
+this func is used to print if the graph is connected
+@param: 
+connected: the result of graph.isConnected()
+*/
 void printConnected(bool connected)
 {
     if (connected)
@@ -26,6 +28,12 @@ void printConnected(bool connected)
         cout << "This graph is not connected" << endl;
     }
 }
+
+/*
+this func is used to print the shortest path that Algorithms::shortestPeth returns.
+@param:
+path: the result of Algorithms::shortestPath(graph, source, destination)
+*/
 void printShortestPath(vector<unsigned int> path)
 {
     if (path.size() > 0)
@@ -43,6 +51,11 @@ void printShortestPath(vector<unsigned int> path)
     }
 }
 
+/*
+this func is used to print the cycle that Algorithms::getCycle returns.
+@param:
+cycle: the vector of the cycle's vertice.
+*/
 void printCycle(vector<unsigned int> cycle)
 {
     if (cycle.size() > 0)
@@ -60,16 +73,21 @@ void printCycle(vector<unsigned int> cycle)
     }
 }
 
-void printNegCycle(vector<unsigned int> cycle)
+/*
+this func is used to print the negative cycle that Algorithms::getNegativeCycle returns.
+@param:
+negcycle: the vector of the negative cycle's vertice.
+*/
+void printNegCycle(vector<unsigned int> negcycle)
 {
-    if (cycle.size() > 0)
+    if (negcycle.size() > 0)
     {
         cout << "The negative cycle is: ";
-        for (unsigned int x = 0; x < cycle.size(); x++)
+        for (unsigned int x = 0; x < negcycle.size(); x++)
         {
-            cout << cycle[x] << "->";
+            cout << negcycle[x] << "->";
         }
-        cout << cycle[0] << endl;
+        cout << negcycle[0] << endl;
     }
     else
     {
@@ -77,6 +95,11 @@ void printNegCycle(vector<unsigned int> cycle)
     }
 }
 
+/*
+this func is used to print the two groups that Algorithms::bipartite divides the vertices into.
+@param:
+bipartite: array of two vectors, each vector contains one group of the graph's vertices.
+*/
 void printBipartite(std::array<vector<unsigned int>, 2> bipartite)
 {
     if (bipartite[0].size() > 0 && bipartite[1].size() > 0)
@@ -147,13 +170,19 @@ int main()
     printCycle(Algorithms::getCycle(g));                  // Should print: "The cycle is: 0->1->2->0"
     printBipartite(Algorithms::bipartitePartition(g));    // Should print: "This is not s bipartite graph"
 
+    vector<vector<int>> graph6 = {
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0}};
+    g.loadGraph(graph6);
+    printBipartite(Algorithms::bipartitePartition(g));
     vector<vector<int>> graph5 = {
         {0, 0, 1, 0},
         {-5, 0, 0, 0},
         {0, 2, 0, -3},
         {0, 0, 0, 0}};
     g.loadGraph(graph5);
-    printNegCycle(Algorithms::getNegativeCycle(g));      //Shoult print "The negative cycle is 0->1->2"
+    printNegCycle(Algorithms::getNegativeCycle(g)); // Shoult print "The negative cycle is 0->1->2"
 
     // 5x4 matrix that reprsents invalid graph.
     vector<vector<int>> graph4 = {
@@ -170,6 +199,4 @@ int main()
     {
         cout << e.what() << endl; // Should print: "Invalid graph: The graph is not a square matrix."
     }
-
-    
 }

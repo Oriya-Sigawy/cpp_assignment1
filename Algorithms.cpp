@@ -10,11 +10,11 @@ using std::string;
 using std::vector;
 namespace ariel
 {
-    // checks strong connectivity
-    bool Algorithms::isConnected(Graph g)
+    // checks strong connectivity for both directed and undirected graphs
+    bool Algorithms::isConnected(Graph &g)
     {
         unsigned int vertices = g.getNumOfVertices();
-        bool *visited = new bool[vertices];
+        bool visited[vertices];
         for (unsigned int u = 0; u < vertices; u++)
         {
             for (unsigned int i = 0; i < vertices; i++)
@@ -30,10 +30,10 @@ namespace ariel
                 }
             }
         }
-        delete[] visited;
         return true;
     }
-    void Algorithms::traverse(unsigned int u, bool *visited, Graph g)
+
+    void Algorithms::traverse(unsigned int u, bool *visited, Graph &g)
     {
         visited[u] = true;
         for (unsigned int v = 0; v < g.getNumOfVertices(); v++)
@@ -47,21 +47,23 @@ namespace ariel
             }
         }
     }
-    //  Function that implements Dijkstra's single source shortest path algorithm
-    vector<unsigned int> Algorithms::shortestPath(Graph g, unsigned int start, unsigned int end)
+
+    vector<unsigned int> Algorithms::shortestPath(Graph &g, unsigned int start, unsigned int end)
     {
+        // check that the graph dosen't contain negative cycle
         if (getNegativeCycle(g).size() > 0)
         {
             throw std::invalid_argument("can not find shortestPath in a graph with neg cycle");
         }
         unsigned int vertices = g.getNumOfVertices();
+        // check that the source and the destination are real vertices in the graph
         if (start >= vertices || end >= vertices)
         {
             throw std::out_of_range("");
         }
-        int *dist = new int[vertices];
-        unsigned int *parents = new unsigned int[vertices];
-        bool *shortestPathSet = new bool[vertices];
+        int dist[vertices];
+        unsigned int parents[vertices];
+        bool shortestPathSet[vertices];
 
         for (unsigned int i = 0; i < vertices; i++)
         {
@@ -95,18 +97,15 @@ namespace ariel
         ans.push_back(start);
         std::reverse(ans.begin(), ans.end());
 
-        delete[] dist;
-        delete[] parents;
-        delete[] shortestPathSet;
         return ans;
     }
 
-    unsigned int Algorithms::minDist(int *dist, bool *shortestPathSet, unsigned int size)
+    unsigned int Algorithms::minDist(int *dist, bool *shortestPathSet, unsigned int vertices)
     {
         int min = INT_MAX;
         unsigned int min_index;
 
-        for (unsigned int v = 0; v < size; v++)
+        for (unsigned int v = 0; v < vertices; v++)
         {
             if (shortestPathSet[v] == false && dist[v] <= min)
             {
@@ -116,16 +115,14 @@ namespace ariel
         return min_index;
     }
 
-    vector<unsigned int> Algorithms::getCycle(Graph g)
+    vector<unsigned int> Algorithms::getCycle(Graph &g)
     {
         bool directed = g.isDirected();
-        // Mark all the vertices as not visited
-        // and not part of recursion stack
         unsigned int vertices = g.getNumOfVertices();
         vector<unsigned int> result;
-        bool *black = new bool[vertices];
-        bool *gray = new bool[vertices];
-        unsigned int *parents = new unsigned int[vertices];
+        bool black[vertices];
+        bool gray[vertices];
+        unsigned int parents[vertices];
         for (unsigned int i = 0; i < vertices; i++)
         {
             black[i] = false;
@@ -133,8 +130,6 @@ namespace ariel
             parents[i] = INT_MAX;
         }
 
-        // Call the recursive helper function
-        // to detect cycle in different DFS trees
         for (unsigned int i = 0; i < vertices; i++)
         {
             if (!black[i])
@@ -154,21 +149,13 @@ namespace ariel
                 }
             }
         }
-        delete[] black;
-        delete[] gray;
-        delete[] parents;
         return result;
     }
 
-    std::array<unsigned int, 2> Algorithms::dfs_visit(bool directed, unsigned int v, bool black[], bool *gray, unsigned int parents[], Graph g)
+    std::array<unsigned int, 2> Algorithms::dfs_visit(bool directed, unsigned int v, bool black[], bool *gray, unsigned int parents[], Graph &g)
     {
         std::array<unsigned int, 2> ans = {INT_MAX, INT_MAX};
-        // Mark the current node as visited
-        // and part of recursion stack
         gray[v] = true;
-
-        // Recur for all the vertices adjacent to this
-        // vertex
         for (unsigned int i = 0; i < g.getNumOfVertices(); ++i)
         {
             if (g.getAt(v, i) != 0)
@@ -191,25 +178,31 @@ namespace ariel
             }
         }
 
-        // Remove the vertex from recursion stack
         gray[v] = false;
         black[v] = true;
         return ans;
     }
 
-    std::array<vector<unsigned int>, 2> Algorithms::bipartitePartition(Graph g)
+    std::array<vector<unsigned int>, 2> Algorithms::bipartitePartition(Graph &g)
     {
-
-        // Create a color array to store colors assigned to all
-        // vertices. Vertex/ number is used as index in this
-        // array. The value '-1' of colors[i] is used to
-        // indicate that no color is assigned to vertex 'i'.
-        // The value 1 is used to indicate first color is
-        // assigned and value 0 indicates second color is
-        // assigned.
         std::array<vector<unsigned int>, 2> ans;
         unsigned int vertices = g.getNumOfVertices();
-        int *colors = new int[vertices];
+        if (g.getNumOfEdges() == 0)
+        {
+            for (unsigned int i = 0; i < vertices; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    ans[0].push_back(i);
+                }
+                else
+                {
+                    ans[1].push_back(i);
+                }
+            }
+            return ans;
+        }
+        int colors[vertices];
         for (unsigned int i = 0; i < vertices; ++i)
         {
             colors[i] = -1;
@@ -235,56 +228,39 @@ namespace ariel
                 ans[1].push_back(i);
             }
         }
-        delete[] colors;
         return ans;
     }
-    bool Algorithms::bipartite(Graph g, unsigned int src, int colors[])
+    bool Algorithms::bipartite(Graph &g, unsigned int src, int colors[])
     {
         colors[src] = 1;
-
-        // Create a queue (FIFO) of vertex numbers a
-        // nd enqueue source vertex for BFS traversal
+        // BFS travel
         std::queue<unsigned int> q;
         q.push(src);
-
-        // Run while there are vertices in queue (Similar to
-        // BFS)
         while (!q.empty())
         {
             unsigned int u = q.front();
             q.pop();
 
-            // Find all non-colored adjacent vertices
             for (unsigned int v = 0; v < g.getNumOfVertices(); ++v)
             {
-                // An edge from u to v exists and
-                // destination v is not colored
                 if (g.getAt(u, v) && colors[v] == -1)
                 {
-                    // Assign alternate color to this
-                    // adjacent v of u
                     colors[v] = 1 - colors[u];
                     q.push(v);
                 }
-
-                // An edge from u to v exists and destination
-                // v is colored with same color as u
                 else if (g.getAt(u, v) && colors[v] == colors[u])
                     return false;
             }
         }
-
-        // If we reach here, then all adjacent vertices can
-        // be colored with alternate color
         return true;
     }
 
-    vector<unsigned int> Algorithms::getNegativeCycle(Graph g)
+    vector<unsigned int> Algorithms::getNegativeCycle(Graph &g)
     {
         unsigned int vertices = g.getNumOfVertices();
-        unsigned int *parents = new unsigned int[vertices];
-        bool *connectedToCycle = new bool[vertices];
-        int *dist = new int[vertices];
+        unsigned int parents[vertices];
+        bool connectedToCycle[vertices];
+        int dist[vertices];
         for (unsigned int source = 0; source < vertices; source++)
         {
             for (unsigned int i = 0; i < vertices; i++)
@@ -343,9 +319,6 @@ namespace ariel
                 return ans;
             }
         }
-        delete[] parents;
-        delete[] connectedToCycle;
-        delete[] dist;
         return vector<unsigned int>();
     }
 }

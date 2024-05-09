@@ -24,8 +24,8 @@ namespace ariel
         this->vertices = 0;
         this->edges = 0;
 
-        this->vertices = g.size();
-        for (unsigned int i = 0; i < vertices; i++)
+        this->vertices = g.size();                  // set num of vertices
+        for (unsigned int i = 0; i < vertices; i++) // this loop checks that there is enough values in every raw of the matrix
         {
             if (g[i].size() != vertices)
             {
@@ -33,11 +33,11 @@ namespace ariel
             }
         }
         this->adjacency_matrix = vector<vector<int>>(vertices, vector<int>(vertices, 0));
-        for (unsigned int i = 0; i < vertices; i++)
+        for (unsigned int i = 0; i < vertices; i++) // copy the matrix
         {
             adjacency_matrix[i] = g[i];
         }
-        for (unsigned int i = 0; i < vertices; i++)
+        for (unsigned int i = 0; i < vertices; i++) // calculates number of edges in a graph
         {
             for (unsigned int j = 0; j < vertices; j++)
             {
@@ -47,7 +47,7 @@ namespace ariel
                 }
             }
         }
-        this->directed = isDirected();
+        this->directed = checkDirected(); // check if the graph is connected
         if (!directed)
         {
             edges /= 2;
@@ -71,10 +71,11 @@ namespace ariel
     {
         return this->edges;
     }
-    bool Graph::checkDirected()
+    bool Graph::isDirected()
     {
         return this->directed;
     }
+
     std::string Graph::to_string()
     {
         std::string str_v = std::to_string(this->vertices);
@@ -82,7 +83,7 @@ namespace ariel
         return "Graph with " + str_v + " vertices and " + str_e + " edges.";
     }
 
-    bool Graph::isDirected()
+    bool Graph::checkDirected()
     {
         bool ans = false;
         for (unsigned int i = 0; i < vertices; i++)
