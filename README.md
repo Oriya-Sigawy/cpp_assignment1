@@ -18,7 +18,14 @@ each one of the classes has a hpp and a cpp files.
 - `bipartite`: this function checks if the graph is bipartite by giving a color to every vertice in the graph. It uses a BFS travel to reach every vertice in the graph, and if the vertice dosen't have a color yet, give it a color. If the vertice have a color, and it's the same color as the vertice's neighboor, the function return false. If the function finishes to give a color to every vertice and dosen't find a node that breaks the bipartite condition, the function returns true.
 - `getNegativeCycle`: this function detects a negative cycle on a given graph. the function uses bellman- ford to find a vertice from the negative cycle and marks all it's parents on the shortest Path until it get back to the vertice, and then returns a vector of all the vertices on the cycle.
 
-`Graph.hpp`: contains the graph's fields, and declarations of its public and the private methods. 
+`Graph.hpp`: contains the graph's fields, and declarations of its public and the private methods.   
 `Graph:cpp`: contains the implementations for the methods:
 - `Graph`: defult constructor that initialize the graph's fields defult variables.
-- ` 
+- `loadGraph`: this function is the real "constructor" for the graph. It sets the adjacency matrix and the number of edges and vertices, and the boolean directed by the matrix it receives. The function checks that the matrix's size is legal, and if the size is not legal, throw an exception. If it is legal, the function sets the number of vertices to be the matrix's size. The function copies the matrix to the adjanency matrix, count the number of edges (every non-zero variable in the matrix) and if the graph is directed (checks it using the helper function "checkDirected"), it set directed to false and divide the number of edges by 2. else, it sets isDirectes to true.
+  - `checkDirected`: helper function for loadGraph that checks if the matrix is symmetrical. return false if it is, true if it isn't.
+- 'getNumOfVertices': getter for the numOfVertices field.
+- 'getNumOfEdges': getter for the numOfEdges field.
+- `getAt`: getter for the value of the edge connected between x and y (given numbers). if there is no edge between them, adjacency_matrix[x][y] will be zero.
+- 'isDirected`: getter for the directed field.
+- `to_string`: returns a string represent the graph in the following format: "Graph with <numOfVertices> vertices and <numOfEdges> edges."
+
