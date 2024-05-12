@@ -261,13 +261,17 @@ namespace ariel
         unsigned int parents[vertices];
         bool connectedToCycle[vertices];
         int dist[vertices];
+        for (unsigned int i = 0; i < vertices; i++)
+        {
+            parents[i] = INT_MAX;
+            dist[i] = INT_MAX;
+            connectedToCycle[i] = false;
+        }
         for (unsigned int source = 0; source < vertices; source++)
         {
-            for (unsigned int i = 0; i < vertices; i++)
+            if (dist[source] != INT_MAX)
             {
-                parents[i] = INT_MAX;
-                dist[i] = INT_MAX;
-                connectedToCycle[i] = false;
+                continue;
             }
             dist[source] = 0;
             for (unsigned int k = 0; k < vertices; k++)
@@ -289,7 +293,7 @@ namespace ariel
             {
                 for (unsigned int j = 0; j < vertices; j++)
                 {
-                    if (g.getAt(i, j) != 0 && dist[i] != INT_MAX && dist[j] > dist[i] + g.getAt(i, j) && !parents[i] == j)
+                    if (g.getAt(i, j) != 0 && dist[i] != INT_MAX && dist[j] > dist[i] + g.getAt(i, j) && !(parents[i] == j))
                     {
                         while (!connectedToCycle[j])
                         {

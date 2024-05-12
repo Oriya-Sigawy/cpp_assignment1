@@ -1,6 +1,6 @@
 // 214984932 Oriyas.07@gmail.com
 
-//TODO-&
+// TODO-&
 /*
 this class represents a graph.
 */
@@ -15,21 +15,29 @@ namespace ariel
     class Graph
     {
     private:
-        //the graph's fields:
+        // the graph's fields:
         vector<vector<int>> adjacency_matrix;
         unsigned int vertices;
         unsigned int edges;
         bool directed;
-        
+
         /*
-        this method checks if the graph is directed by the adjacency matrix - 
-        if the matrix is simetrical, the graph is undirected. 
+        this method checks if the graph is directed by the adjacency matrix -
+        if the matrix is simetrical, the graph is undirected.
         otherwise, the graph is directed.
         @returns: true if the graph is directed, false if the graph is undirected.*/
         bool checkDirected();
 
     public:
-        Graph(); // defult constructor
+        /*
+        this is a defult constructor.
+        the constructor initializes the graph's fields to the following variables:
+        directed -> false
+        vertices -> 5
+        edges -> 0
+        adjacency matrix -> matrix of zeros in size 5x5
+        */
+        Graph();
 
         /*
         this method used to load a matrix to the graph.
@@ -44,7 +52,7 @@ namespace ariel
         */
         std::string to_string();
 
-        //getters:
+        // getters:
         unsigned int getNumOfVertices();
         int getAt(unsigned int x, unsigned int y);
         unsigned int getNumOfEdges();
