@@ -1,6 +1,5 @@
 // 214984932 Oriyas.07@gmail.com
 
-// TODO-&
 /*
 this class represents a graph.
 */
