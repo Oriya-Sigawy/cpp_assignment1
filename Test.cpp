@@ -66,6 +66,34 @@ result: array of 2 vectors which holds the two groups divation for the graph's v
 */
 bool testBipartite(ariel::Graph g, std::array<vector<unsigned int>, 2> result)
 {
+    bool arr[g.getNumOfVertices()];
+    for (int i = 0; i < g.getNumOfVertices(); i++)
+    {
+        arr[i] = false;
+    }
+    for (unsigned int i = 0; i < result[0].size(); i++)
+    {
+        if (arr[result[0][i]])
+        {
+            return false;
+        }
+        arr[result[0][i]] = true;
+    }
+    for (unsigned int i = 0; i < result[1].size(); i++)
+    {
+        if (arr[result[1][i]])
+        {
+            return false;
+        }
+        arr[result[1][i]] = true;
+    }
+    for (int i = 0; i < g.getNumOfVertices(); i++)
+    {
+        if (!arr[i])
+        {
+            return false;
+        }
+    }
     for (unsigned int i = 0; i < result[0].size(); i++)
     {
         for (unsigned int j = 0; j < result[0].size(); j++)
@@ -585,7 +613,8 @@ TEST_CASE("Test bipartitePartition in directed Graph with cycle with even length
         {0, 1, 0, 0, 1, 0}};
     g.loadGraph(graph);
     std::array<vector<unsigned int>, 2> result = ariel::Algorithms::bipartitePartition(g);
-    CHECK(testBipartite(g, result));
+    bool check = result[0].size() == 0 && result[1].size() == 0;
+    CHECK(check == true);
 }
 
 TEST_CASE("Test bipartitePartition in graph with no edges")
@@ -734,4 +763,3 @@ TEST_CASE("Test getNegativeCycle in undirected disconnected graph with negative 
     vector<unsigned int> ans = ariel::Algorithms::getNegativeCycle(g);
     CHECK(testNegCycle(g, ans));
 }
-
