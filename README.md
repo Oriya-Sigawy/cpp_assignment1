@@ -29,10 +29,10 @@ each one of the classes has a hpp and a cpp files.
 - 'isDirected`: getter for the directed field.
 - `to_string`: returns a string represent the graph in the following format: "Graph with <numOfVertices> vertices and <numOfEdges> edges."
 
-The other files in the assignment:
-`Demo.cpp`: I added prints of the result of the function "getNegativeCycle", and I changed it to match the return values of my functions. Because my functions return vectors and not strings, I added some helper functions to print the vectors.
-`Makefile`: in the makefile I changed the compiler to g++, because I know how to add debug information to it. I also divided the rules and the targets, because there were more than one file with "main" in a rule.
-`testMain.cpp`: I added this file to run the doctest and the Test.cpp files.
+The other files in the assignment:  
+`Demo.cpp`: I added prints of the result of the function "getNegativeCycle", and I changed it to match the return values of my functions. Because my functions return vectors and not strings, I added some helper functions to print the vectors.  
+`Makefile`: in the makefile I changed the compiler to g++, because I know how to add debug information to it. I also divided the rules and the targets, because there were more than one file with "main" in a rule.  
+`testMain.cpp`: I added this file to run the doctest and the Test.cpp files.  
 'Test.cpp`: I added some tests to the test I was given. I also added a few functions:
 - `testCycle`: this function checks that the vector that "Algorithms::getCycle" returns is realy a cycle. it checks that there is an edge between every two following elements in the vector, and also an edge between the first and the last elements.
 - `testNegCycle`:this function checks that the vector that "Algorithms::getNegativeCycle" returns is realy a negative cycle. it checks that there is an edge between every two following elements in the vector, and also an edge between the first and the last elements, sums the weights of these edges, and checks that the sum is negative.
