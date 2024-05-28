@@ -425,6 +425,19 @@ TEST_CASE("Test shortestPath in undirected connected graph")
     CHECK(ariel::Algorithms::shortestPath(g, 0, 2) == check);
 }
 
+TEST_CASE("Test shortestPath with neg cycle disconnected to the shortest Path")
+{
+     ariel::Graph g;
+    vector<vector<int>> graph = {
+        {0, 1, 0, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, -1},
+        {0, 0, -1, 0}};
+    g.loadGraph(graph);
+    vector<unsigned int> check = {0, 1};
+    CHECK(ariel::Algorithms::shortestPath(g, 0, 1) == check);
+}
+
 TEST_CASE("Test shortestPath in undirected disconnected graph")
 {
     ariel::Graph g;
