@@ -25,7 +25,7 @@ namespace ariel
         this->edges = 0;
 
         this->vertices = g.size();                  // set num of vertices
-        for (unsigned int i = 0; i < vertices; i++) // this loop checks that there is enough values in every raw of the matrix
+        for (unsigned int i = 0; i < vertices; i++) //checks that there is enough values in every raw of the matrix
         {
             if (g[i].size() != vertices)
             {

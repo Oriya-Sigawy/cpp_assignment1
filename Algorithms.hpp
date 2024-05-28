@@ -19,11 +19,12 @@ namespace ariel
         this func checks whether the graph is connected.
         @param: 
         g: graph to check it's connectivity.
-        @returns: true if the graph is connected, otherwise false.*/
+        @returns: true if the graph is connected, otherwise false.
+        */
         static bool isConnected(Graph &g);
 
         /*
-        this func gives the shortest path in the graph between the source and the destination using dijkstra's algorithm.
+        this func gives the shortest path in the graph between the source and the destination using bellman ford's algorithm.
         @param: 
         g: the graph to run the shortest path on.
         source: the verteice to start the shortest path from.
@@ -69,16 +70,6 @@ namespace ariel
         g: the graph to check the paths in
         */
         static void traverse(unsigned int source, bool* visited, Graph& g);
-
-        /*
-        this func calculates the index with the minimal distance that is not part from the shortestPath set.
-        @params:
-        dist: array that holds the distance from the source for every vertice
-        shortestPathSet: array that holds for every vertice if it is part of the shortestPathSet from the source to the distanation
-        vertices: number of vertices in the graph
-        @returns: the index with the min dist that is not part of the SP-set.
-        */
-        static unsigned int minDist(int *dist, bool *shortestPathSet, unsigned int vertices); 
 
         /*
         this func helps getCycle by running dfs on the graph and searching for back edges 

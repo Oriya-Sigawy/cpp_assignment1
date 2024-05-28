@@ -51,10 +51,6 @@ namespace ariel
     vector<unsigned int> Algorithms::shortestPath(Graph &g, unsigned int start, unsigned int end)
     {
         // check that the graph dosen't contain negative cycle
-        if (getNegativeCycle(g).size() > 0)
-        {
-            throw std::invalid_argument("can not find shortestPath in a graph with neg cycle");
-        }
         unsigned int vertices = g.getNumOfVertices();
         // check that the source and the destination are real vertices in the graph
         if (start >= vertices || end >= vertices)
@@ -70,16 +66,27 @@ namespace ariel
             dist[i] = INT_MAX, shortestPathSet[i] = false, parents[i] = INT_MAX;
         }
         dist[start] = 0;
-        for (unsigned int count = 0; count < vertices - 1; count++)
+        for (unsigned int k = 0; k < vertices; k++)
         {
-            unsigned int u = minDist(dist, shortestPathSet, vertices);
-            shortestPathSet[u] = true;
-            for (unsigned int v = 0; v < vertices; v++)
+            for (unsigned int i = 0; i < vertices; i++)
             {
-                if (!shortestPathSet[v] && g.getAt(u, v) && dist[u] != INT_MAX && dist[u] + g.getAt(u, v) < dist[v])
+                for (unsigned int j = 0; j < vertices; j++)
                 {
-                    dist[v] = dist[u] + g.getAt(u, v);
-                    parents[v] = u;
+                    if (g.getAt(i, j) != 0 && dist[i] != INT_MAX && dist[j] > dist[i] + g.getAt(i, j) && !(parents[i] == j))
+                    {
+                        dist[j] = dist[i] + g.getAt(i, j);
+                        parents[j] = i;
+                    }
+                }
+            }
+        }
+        for (unsigned int i = 0; i < vertices; i++)
+        {
+            for (unsigned int j = 0; j < vertices; j++)
+            {
+                if (g.getAt(i, j) != 0 && dist[i] != INT_MAX && dist[j] > dist[i] + g.getAt(i, j) && !(parents[i] == j))
+                {
+                    throw std::invalid_argument("can not find shortestPath in a graph with neg cycle");
                 }
             }
         }
@@ -96,23 +103,7 @@ namespace ariel
         }
         ans.push_back(start);
         std::reverse(ans.begin(), ans.end());
-
         return ans;
-    }
-
-    unsigned int Algorithms::minDist(int *dist, bool *shortestPathSet, unsigned int vertices)
-    {
-        int min = INT_MAX;
-        unsigned int min_index;
-
-        for (unsigned int v = 0; v < vertices; v++)
-        {
-            if (shortestPathSet[v] == false && dist[v] <= min)
-            {
-                min = dist[v], min_index = v;
-            }
-        }
-        return min_index;
     }
 
     vector<unsigned int> Algorithms::getCycle(Graph &g)
@@ -263,9 +254,7 @@ namespace ariel
         int dist[vertices];
         for (unsigned int i = 0; i < vertices; i++)
         {
-            parents[i] = INT_MAX;
-            dist[i] = INT_MAX;
-            connectedToCycle[i] = false;
+            parents[i] = INT_MAX, dist[i] = INT_MAX, connectedToCycle[i] = false;
         }
         for (unsigned int source = 0; source < vertices; source++)
         {

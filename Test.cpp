@@ -117,7 +117,7 @@ bool testBipartite(ariel::Graph g, std::array<vector<unsigned int>, 2> result)
     return true;
 }
 
-////tests for Graph.cpp
+//tests for Graph.cpp
 TEST_CASE("Test invalid graph")
 {
     ariel::Graph g;
@@ -392,7 +392,7 @@ TEST_CASE("Test shortestPath in directed graph whith negative edges (dijkstra fa
 {
     ariel::Graph g;
     vector<vector<int>> graph = {
-        {0, 2, 2, 0},
+        {0, 1, 2, 0},
         {0, 0, 0, 1},
         {0, -2, 0, 0},
         {0, 0, 0, 0}};
